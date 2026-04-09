@@ -15,7 +15,7 @@ python -m pip install --upgrade pip
 - Step 4 - Install FastAPI and Uvicorn
 pip install fastapi uvicorn
 
-### Run The Backend
+### Run It
 uvicorn Neural:app --reload --port 3000
 
 ## Frontend
