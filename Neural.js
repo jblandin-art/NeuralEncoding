@@ -1,156 +1,128 @@
-import { useEffect, useState } from "react";
-
-const STATUS = {
-  DISCONNECTED: "Disconnected",
-  CONNECTING: "Connecting",
-  CONNECTED: "Connected",
-  STREAMING: "Streaming",
-};
+import { useEffect, useRef, useState } from "react";
 
 export default function ConnectionToggle() {
-  const [status, setStatus] = useState(STATUS.DISCONNECTED);
+  const [connected, setConnected] = useState(false);
+  const [statusText, setStatusText] = useState("Disconnected");
   const [error, setError] = useState("");
+  const [eegData, setEegData] = useState([]);
+  const intervalRef = useRef(null);
 
-  const isOn =
-    status === STATUS.CONNECTING ||
-    status === STATUS.CONNECTED ||
-    status === STATUS.STREAMING;
-
-  const isBusy = status === STATUS.CONNECTING;
-
-  async function fetchCurrentStatus() {
+  async function startConnection() {
     try {
       setError("");
+      setStatusText("Connecting...");
 
-      const res = await fetch("/api/device/status");
-      if (!res.ok) {
-        throw new Error("Failed to fetch current status.");
-      }
+      const res = await fetch("http://127.0.0.1:8000/start_connection", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      });
 
       const data = await res.json();
 
-      if (Object.values(STATUS).includes(data.status)) {
-        setStatus(data.status);
-      } else {
-        throw new Error("Backend returned an unknown status.");
+      if (!res.ok) {
+        throw new Error(data.detail || "Failed to start connection.");
       }
+
+      setConnected(true);
+      setStatusText("Connected");
+
+      startPolling();
     } catch (err) {
-      setError(err.message || "Unable to load status.");
+      setConnected(false);
+      setStatusText("Disconnected");
+      setError(err.message || "Start failed.");
     }
   }
 
-  async function handleToggleChange() {
-    if (isBusy) return;
+  async function endConnection() {
+    try {
+      setError("");
 
-    const previousStatus = status;
-    setError("");
+      const res = await fetch("http://127.0.0.1:8000/end_connection", {
+        method: "POST",
+      });
 
-    if (status === STATUS.DISCONNECTED) {
-      try {
-        setStatus(STATUS.CONNECTING);
+      const data = await res.json();
 
-        const res = await fetch("/api/device/start", {
-          method: "POST",
-        });
-
-        if (!res.ok) {
-          throw new Error("Failed to start device.");
-        }
-
-        const data = await res.json();
-
-        if (Object.values(STATUS).includes(data.status)) {
-          setStatus(data.status);
-        } else {
-          throw new Error("Backend returned an unknown status.");
-        }
-      } catch (err) {
-        setStatus(previousStatus);
-        setError(err.message || "Start request failed.");
+      if (!res.ok) {
+        throw new Error(data.detail || "Failed to end connection.");
       }
-      return;
+
+      stopPolling();
+      setConnected(false);
+      setStatusText("Disconnected");
+      setEegData([]);
+    } catch (err) {
+      setError(err.message || "Stop failed.");
     }
+  }
 
-    if (status === STATUS.CONNECTED || status === STATUS.STREAMING) {
-      try {
-        const res = await fetch("/api/device/stop", {
-          method: "POST",
-        });
+  async function fetchEEGSlice() {
+    try {
+      const res = await fetch(
+        "http://127.0.0.1:8000/get_slice?sensor=EEG&seconds=1"
+      );
 
-        if (!res.ok) {
-          throw new Error("Failed to stop device.");
-        }
+      const data = await res.json();
 
-        const data = await res.json();
-
-        if (Object.values(STATUS).includes(data.status)) {
-          setStatus(data.status);
-        } else {
-          setStatus(STATUS.DISCONNECTED);
-        }
-      } catch (err) {
-        setError(err.message || "Stop request failed.");
+      if (!res.ok) {
+        throw new Error(data.detail || "Failed to fetch EEG slice.");
       }
+
+      setEegData(data.data || []);
+    } catch (err) {
+      setError(err.message || "Polling failed.");
+      stopPolling();
+      setConnected(false);
+      setStatusText("Disconnected");
+    }
+  }
+
+  function startPolling() {
+    stopPolling();
+    intervalRef.current = setInterval(() => {
+      fetchEEGSlice();
+    }, 500);
+  }
+
+  function stopPolling() {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
   }
 
   useEffect(() => {
-    fetchCurrentStatus();
+    return () => stopPolling();
   }, []);
 
-  function getStatusClassName(currentStatus) {
-    switch (currentStatus) {
-      case STATUS.DISCONNECTED:
-        return "status disconnected";
-      case STATUS.CONNECTING:
-        return "status connecting";
-      case STATUS.CONNECTED:
-        return "status connected";
-      case STATUS.STREAMING:
-        return "status streaming";
-      default:
-        return "status";
-    }
-  }
-
   return (
-    <section className="connection-card" aria-labelledby="connection-title">
-      <h2 id="connection-title">Device Control</h2>
+    <div style={{ padding: "20px" }}>
+      <h2>Fake EEG Stream</h2>
 
-      <div className="control-row">
-        <label className="toggle-wrapper">
-          <span className="toggle-label">Connect</span>
+      <p>
+        <strong>Status:</strong> {statusText}
+      </p>
 
-          <button
-            type="button"
-            role="switch"
-            aria-checked={isOn}
-            aria-label={`Device connection toggle. Current status: ${status}`}
-            aria-busy={isBusy}
-            disabled={isBusy}
-            onClick={handleToggleChange}
-            className={`toggle ${isOn ? "toggle-on" : "toggle-off"} ${
-              isBusy ? "toggle-disabled" : ""
-            }`}
-          >
-            <span className="toggle-thumb" />
-          </button>
-        </label>
-
-        <div className={getStatusClassName(status)} aria-live="polite">
-          {status}
-        </div>
-      </div>
+      {!connected ? (
+        <button onClick={startConnection}>Connect</button>
+      ) : (
+        <button onClick={endConnection}>Disconnect</button>
+      )}
 
       {error && (
-        <p className="error-message" role="alert">
-          {error}
+        <p style={{ color: "red" }}>
+          <strong>Error:</strong> {error}
         </p>
       )}
 
-      <button type="button" onClick={fetchCurrentStatus} className="refresh-btn">
-        Refresh status
-      </button>
-    </section>
+      <h3>Latest EEG Slice</h3>
+      <pre style={{ background: "#f4f4f4", padding: "12px", overflowX: "auto" }}>
+        {JSON.stringify(eegData.slice(0, 5), null, 2)}
+      </pre>
+    </div>
   );
 }
