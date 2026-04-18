@@ -1,9 +1,9 @@
-import ConnectionToggle from "./ConnectionToggle";
+import LiveFeed from "./LiveFeed";
 
 function App() {
   return (
     <div>
-      <ConnectionToggle />
+      <LiveFeed />
     </div>
   );
 }
