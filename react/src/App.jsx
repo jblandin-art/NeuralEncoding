@@ -3,7 +3,10 @@ import ConnectionToggle from "./ConnectionToggle";
 function App() {
   return (
     <div>
-      <ConnectionToggle />
+      
+      {
+      //<ConnectionToggle />
+    }
     </div>
   );
 }
