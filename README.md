@@ -16,7 +16,7 @@ python -m pip install --upgrade pip
 pip install fastapi uvicorn
 
 ### Run It
-uvicorn Neural:app --reload --port 3000
+uvicorn fake_stream:app --reload --port 8000
 
 ## Frontend
 
@@ -32,5 +32,3 @@ npm start
 
 
 ## Done!
-
-TEST

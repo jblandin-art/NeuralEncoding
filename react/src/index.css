@@ -1,5 +1,68 @@
 @import "tailwindcss";
 
+@theme {
+  --color-on-tertiary-container: #4a5e00;
+  --color-primary-fixed: #00e3fd;
+  --color-inverse-surface: #f9f9ff;
+  --color-surface-container-lowest: #000000;
+  --color-error-container: #9f0519;
+  --color-surface-container: #161a21;
+  --color-surface-tint: #81ecff;
+  --color-tertiary-container: #cafd00;
+  --color-primary-container: #00e3fd;
+  --color-error-dim: #d7383b;
+  --color-on-error-container: #ffa8a3;
+  --color-tertiary-fixed-dim: #beee00;
+  --color-on-tertiary-fixed-variant: #526900;
+  --color-secondary-fixed-dim: #babfff;
+  --color-on-surface-variant: #a9abb3;
+  --color-on-surface: #ecedf6;
+  --color-inverse-primary: #006976;
+  --color-on-primary-fixed-variant: #005762;
+  --color-surface-variant: #22262f;
+  --color-on-primary: #005762;
+  --color-surface: #0b0e14;
+  --color-tertiary-fixed: #cafd00;
+  --color-on-secondary-fixed: #000db1;
+  --color-secondary-dim: #5361ff;
+  --color-secondary: #8b95ff;
+  --color-on-secondary-fixed-variant: #2633df;
+  --color-on-secondary: #000676;
+  --color-outline-variant: #45484f;
+  --color-surface-container-highest: #22262f;
+  --color-primary: #81ecff;
+  --color-on-secondary-container: #cacdff;
+  --color-error: #ff716c;
+  --color-surface-dim: #0b0e14;
+  --color-tertiary-dim: #beee00;
+  --color-background: #0b0e14;
+  --color-surface-container-high: #1c2028;
+  --color-on-error: #490006;
+  --color-on-primary-fixed: #003840;
+  --color-on-tertiary: #516700;
+  --color-tertiary: #f3ffca;
+  --color-on-tertiary-fixed: #3a4a00;
+  --color-secondary-container: #1523d6;
+  --color-primary-fixed-dim: #00d4ec;
+  --color-secondary-fixed: #cbceff;
+  --color-outline: #73757d;
+  --color-on-primary-container: #004d57;
+  --color-primary-dim: #00d4ec;
+  --color-surface-bright: #282c36;
+  --color-inverse-on-surface: #52555c;
+  --color-on-background: #ecedf6;
+  --color-surface-container-low: #10131a;
+
+  --radius: 0.125rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
+  --radius-full: 0.75rem;
+
+  --font-headline: "Space Grotesk", sans-serif;
+  --font-body: "Manrope", sans-serif;
+  --font-label: "Space Grotesk", sans-serif;
+}
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -54,18 +117,19 @@
 
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  text-align: left;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 h1,
