@@ -1,4 +1,5 @@
 import ConnectionToggle from "./ConnectionToggle";
+import SideNavBar from "./SideNavBar";
 import WaveformChart from "./WaveformChart";
 import { useEegStream } from "./useEegStream";
 
@@ -47,73 +48,7 @@ export default function LiveFeed() {
 
   return (
     <div className="bg-background text-on-surface min-h-screen w-full overflow-x-hidden flex flex-col md:h-screen md:flex-row">
-      {/* SideNavBar (Desktop) */}
-      <nav className="hidden md:flex flex-col py-8 gap-4 border-r border-[#ecedf6]/5 h-screen w-64 bg-[#161a21] shrink-0 z-20">
-        <div className="px-6 mb-8 flex flex-col gap-2">
-          <span className="font-['Space_Grotesk'] font-bold text-[#00E5FF] text-xl tracking-widest uppercase">
-            NEURAL_CORE v1.0
-          </span>
-        </div>
-        <div className="px-6 mb-8 flex items-center gap-4">
-          <div className="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden shrink-0">
-            <img
-              alt="User Neural Profile"
-              className="w-full h-full object-cover"
-              data-alt="close up of a professional individual with subtle high tech lighting"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtRlqRwXq4vlzXj9eKZMbuSp7RvxYVSzXvJjHKCmSxBHQ8KKp44ta6r83I9bUKY2-RtjQPSzxzFGLwTDmbtxE791M5biprLM5-DIgaOmOVsRlcygN5MDV2pB9BW34c6H9O5DLLLCmTNrHyzikII4LUcRDukAkmiC4v6CXYpwuT15enWtaYeCYbbngO-0TwoFnBJ1K1Llw8sqWwqXhq6Y264NktxI9oVmlc0TygOaXwOZxBdJXGJ55EbuVUuF6kB3BP-VNNOjHvhto"
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-headline font-bold text-on-surface text-sm">Operator_01</span>
-            <span className="font-body text-secondary text-xs">Sync: 98.4%</span>
-          </div>
-        </div>
-        <div className="flex flex-col flex-1 px-4 gap-2">
-          {/* Active Tab */}
-          <a
-            className="flex items-center gap-4 px-4 py-3 rounded text-[#00E5FF] border-l-2 border-[#00E5FF] bg-[#1c2028] font-['Manrope'] text-sm uppercase tracking-wider hover:opacity-100 transition-all duration-200 ease-in-out cursor-pointer active:scale-95"
-            href="#"
-          >
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
-              neurology
-            </span>
-            <span>Neural Feed</span>
-          </a>
-          {/* Inactive Tabs */}
-          <a
-            className="flex items-center gap-4 px-4 py-3 rounded text-[#ecedf6] opacity-50 font-['Manrope'] text-sm uppercase tracking-wider hover:opacity-100 hover:bg-[#1c2028] transition-all duration-200 ease-in-out cursor-pointer active:scale-95"
-            href="#"
-          >
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>
-              insights
-            </span>
-            <span>ML Insights</span>
-          </a>
-          <a
-            className="flex items-center gap-4 px-4 py-3 rounded text-[#ecedf6] opacity-50 font-['Manrope'] text-sm uppercase tracking-wider hover:opacity-100 hover:bg-[#1c2028] transition-all duration-200 ease-in-out cursor-pointer active:scale-95"
-            href="#"
-          >
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>
-              hub
-            </span>
-            <span>Web3 Analytics</span>
-          </a>
-          <a
-            className="flex items-center gap-4 px-4 py-3 rounded text-[#ecedf6] opacity-50 font-['Manrope'] text-sm uppercase tracking-wider hover:opacity-100 hover:bg-[#1c2028] transition-all duration-200 ease-in-out cursor-pointer active:scale-95"
-            href="#"
-          >
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>
-              terminal
-            </span>
-            <span>System Logs</span>
-          </a>
-        </div>
-        <div className="px-6 mt-auto">
-          <button className="w-full py-3 bg-gradient-to-br from-primary to-primary-dim text-on-primary font-headline font-bold text-sm tracking-wider rounded-sm hover:opacity-90 transition-opacity flex justify-center items-center gap-2">
-            NEW SESSION
-          </button>
-        </div>
-      </nav>
+      <SideNavBar />
 
       {/* TopAppBar (Mobile) */}
       <header className="md:hidden flex justify-between items-center w-full px-6 h-16 border-b border-[#ecedf6]/5 bg-[#0b0e14] shrink-0 z-20">
@@ -199,7 +134,7 @@ export default function LiveFeed() {
                 Mean Electrode Impedance
               </span>
               <div className="flex items-baseline gap-2">
-                <span className="font-headline font-bold text-5xl text-on-surface">4.2</span>
+                <span className="font-headline font-bold text-5xl text-on-surface">X.x</span>
                 <span className="font-body text-secondary text-lg">kΩ</span>
               </div>
               {/* Nested Recessed Data */}
@@ -214,7 +149,6 @@ export default function LiveFeed() {
           <section className="lg:col-span-6 bg-surface-container rounded-sm p-6 flex flex-col gap-4">
             <div className="flex justify-between items-center border-b border-background pb-4">
               <h2 className="font-headline font-semibold text-lg text-on-surface flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary">grain</span>
                 Sensor Array Map
               </h2>
               <span className="text-xs font-label text-on-surface-variant">Standard 10-20 System</span>

@@ -8,6 +8,8 @@ Both the backend, the dev server, and the electron window will need terminals ru
 ### Setup
 - Step 1 - Create the Venv: 
 python -m venv venv
+or
+py -m venv venv
 - Step 2 - Activate It: 
 .\venv\Scripts\Activate.ps1
 - Step 3 - Upgrade pip: 
