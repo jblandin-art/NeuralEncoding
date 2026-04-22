@@ -1,7 +1,7 @@
 import ConnectionToggle from "./ConnectionToggle";
 import SideNavBar from "./SideNavBar";
 import WaveformChart from "./WaveformChart";
-import { useEegStream } from "./useEegStream";
+import { useSharedEegStream } from "./EegStreamContext";
 
 function rms(values) {
   if (!values.length) return 0;
@@ -39,7 +39,7 @@ export default function LiveFeed() {
     isOn,
     isBusy,
     handleToggleChange,
-  } = useEegStream();
+  } = useSharedEegStream();
 
   const isStreaming = status === "Streaming";
   const snrDb = calculateSnrDb(graphData);
