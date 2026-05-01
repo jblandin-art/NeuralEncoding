@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, nativeTheme } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 
@@ -8,11 +8,16 @@ if (started) {
 }
 
 const createWindow = () => {
+  // Determine background color based on system preference
+  const isDarkMode = nativeTheme.shouldUseDarkColors;
+  const backgroundColor = isDarkMode ? '#0b0e14' : '#ffffff';
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     fullscreen: true,
+    backgroundColor: backgroundColor,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },

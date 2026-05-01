@@ -12,9 +12,11 @@ or
 py -m venv venv
 - Step 2 - Activate It: 
 .\venv\Scripts\Activate.ps1
-- Step 3 - Upgrade pip: 
+- Step 3 - Install dependencies
+npm install
+- Step 4 - Upgrade pip: 
 python -m pip install --upgrade pip
-- Step 4 - Install FastAPI and Uvicorn
+- Step 5 - Install FastAPI and Uvicorn
 pip install fastapi uvicorn
 
 ### Run It
