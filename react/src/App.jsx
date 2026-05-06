@@ -1,6 +1,6 @@
 import LiveFeed from "./LiveFeed";
 import {MemoryRouter as Router, Routes, Route} from "react-router-dom";
-import InsightsPage from "./InsightsPage";
+import TrainingPage from "./TrainingPage";
 import SystemLogsPage from "./SystemLogsPage";
 import { EegStreamProvider } from "./EegStreamContext";
 
@@ -10,7 +10,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<LiveFeed />} />
-          <Route path="/insights" element={<InsightsPage />} />
+          <Route path="/training" element={<TrainingPage />} />
           <Route path="/system-logs" element={<SystemLogsPage />} />
         </Routes>
       </Router>

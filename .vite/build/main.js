@@ -484,12 +484,20 @@ const createWindow = () => {
     width: 800,
     height: 600,
     backgroundColor: backgroundColor,
+    fullscreen: true,
     webPreferences: {
       preload: path$1.join(__dirname, "preload.js")
     }
   });
+  mainWindow.webContents.on("before-input-event", (event, input) => {
+    if (input.type === "keyDown" && input.key === "Escape" && mainWindow.isFullScreen()) {
+      event.preventDefault();
+      mainWindow.setFullScreen(false);
+      mainWindow.minimize();
+    }
+  });
   mainWindow.loadURL("http://localhost:5173");
-  mainWindow.maximize();
+  //mainWindow.maximize();
   //mainWindow.webContents.openDevTools();
 };
 require$$3$1.app.whenReady().then(() => {

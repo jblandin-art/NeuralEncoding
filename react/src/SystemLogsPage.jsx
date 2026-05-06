@@ -1,5 +1,6 @@
 import SideNavBar from "./SideNavBar";
 import { useSharedEegStream } from "./EegStreamContext";
+import { useNav } from "./NavProvider";
 
 function buildMiniWavePath(data, width, height, padding) {
   if (!data.length) {
@@ -23,41 +24,46 @@ export default function SystemLogsPage() {
   const { status, graphData } = useSharedEegStream();
   const isSocketConnected = status === "Connected" || status === "Streaming";
   const miniWavePath = buildMiniWavePath(graphData, 100, 20, 2);
+  const { toggleNav } = useNav();
 
   return (
-    <div className="bg-background text-on-surface font-body min-h-screen w-full overflow-x-hidden flex flex-col md:h-screen md:flex-row">
-      <header className="md:hidden bg-[#0b0e14] flex justify-between items-center w-full px-6 h-16 border-b border-[#ecedf6]/5">
-        <div className="text-xl font-bold tracking-widest text-[#00E5FF] uppercase font-headline">NEURAL_CORE v1.0</div>
-        <div className="flex gap-4">
-          <button className="text-[#00E5FF] cursor-pointer active:scale-95 hover:bg-[#1c2028] transition-colors p-2 rounded">
-            <span className="material-symbols-outlined">sensors</span>
-          </button>
-          <button className="text-[#ecedf6] opacity-70 cursor-pointer active:scale-95 hover:bg-[#1c2028] transition-colors p-2 rounded">
-            <span className="material-symbols-outlined">settings_input_component</span>
-          </button>
-          <button className="text-[#ecedf6] opacity-70 cursor-pointer active:scale-95 hover:bg-[#1c2028] transition-colors p-2 rounded">
-            <span className="material-symbols-outlined">account_circle</span>
-          </button>
-        </div>
-      </header>
+    <div className="bg-background text-on-surface font-body h-screen w-full overflow-hidden flex flex-row">
 
       <SideNavBar />
 
-      <main className="flex-1 h-full overflow-hidden flex flex-col bg-background relative z-10 min-w-0">
-        <header className="hidden md:flex justify-between items-center w-full px-8 h-20 bg-surface-container-low shrink-0 relative z-20">
+      <main className="flex-1 min-w-0 overflow-y-auto terminal-scroll bg-background p-8 flex flex-col gap-8">
+        <button
+          type="button"
+          onClick={toggleNav}
+          aria-label="Toggle navigation"
+          className="p-5 self-start inline-flex h-10 w-10 items-center justify-center rounded-sm border border-outline-variant/30 bg-surface-container text-on-surface transition-colors hover:bg-surface-container-high active:scale-95 hover:cursor-pointer"
+        >
+          <span className="sr-only">Toggle navigation</span>
+          <span className="flex flex-col gap-1.5">
+            <span className="h-0.5 w-5 rounded-full bg-primary" />
+            <span className="h-0.5 w-5 rounded-full bg-primary" />
+            <span className="h-0.5 w-5 rounded-full bg-primary" />
+          </span>
+        </button>
+        <header className="flex flex-row justify-between items-end gap-4 shrink-0">
           <div>
-            <h1 className="font-headline text-2xl font-extrabold tracking-tight text-on-surface">System Terminal</h1>
+            <h1 className="font-headline text-5xl font-bold text-on-surface tracking-tight mb-2">
+              System Terminal
+            </h1>
+            <p className="font-body text-on-surface-variant text-base">
+              Monitoring real-time system events and encoded stream diagnostics.
+            </p>
           </div>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 bg-surface-container-highest px-4 py-2 rounded-sm border border-outline-variant/15">
-              <span className={`w-2 h-2 rounded-full ${isSocketConnected ? "bg-tertiary animate-pulse" : "bg-error"}`} />
-              <span className={`font-headline text-xs uppercase tracking-widest ${isSocketConnected ? "text-tertiary" : "text-error"}`}>
-                Socket: {isSocketConnected ? "Connected" : "Disconnected"}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 bg-surface-container-high px-4 py-2 rounded-sm outline outline-1 outline-outline-variant/15">
+              <div className={`w-2 h-2 rounded-full shadow-[0_0_8px_theme('colors.tertiary')] ${isSocketConnected ? "bg-tertiary animate-pulse" : "bg-error"}`} />
+              <span className="font-label text-sm font-bold text-on-surface tracking-widest uppercase">
+                {isSocketConnected ? "Socket Connected" : "Socket Disconnected"}
               </span>
             </div>
-            <div className="relative w-64">
+            <div className="w-64">
               <input
-                className="w-full bg-surface-container-lowest border-b-2 border-outline-variant text-on-surface text-sm py-2 pl-10 pr-4 focus:outline-none focus:border-primary focus:bg-surface-container transition-colors rounded-t-sm"
+                className="w-full bg-surface-container-lowest border-b-2 border-outline-variant text-on-surface text-sm py-2 px-4 focus:outline-none focus:border-primary focus:bg-surface-container transition-colors rounded-t-sm"
                 placeholder="Filter logs..."
                 type="text"
               />
@@ -65,8 +71,7 @@ export default function SystemLogsPage() {
           </div>
         </header>
 
-        <div className="flex-1 p-6 md:p-8 overflow-y-auto terminal-scroll relative">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full min-h-[800px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full min-h-[800px]">
             <div className="lg:col-span-8 flex flex-col gap-6">
               <div className="grid grid-cols-3 gap-6 shrink-0">
                 <div className="bg-surface-container p-5 rounded-sm border border-outline-variant/15 relative overflow-hidden group">
@@ -98,7 +103,6 @@ export default function SystemLogsPage() {
               <div className="flex-1 bg-surface-container-lowest border border-outline-variant/20 rounded-sm flex flex-col overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
                 <div className="bg-surface-container-highest px-4 py-3 flex justify-between items-center border-b border-outline-variant/20 shrink-0">
                   <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-[18px]">terminal</span>
                     <span className="font-headline text-xs text-on-surface uppercase tracking-widest">Raw Encoding Stream</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -230,7 +234,6 @@ export default function SystemLogsPage() {
                 </div>
               </div>
             </div>
-          </div>
         </div>
       </main>
     </div>

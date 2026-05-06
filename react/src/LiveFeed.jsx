@@ -2,6 +2,7 @@ import ConnectionToggle from "./ConnectionToggle";
 import SideNavBar from "./SideNavBar";
 import WaveformChart from "./WaveformChart";
 import { useSharedEegStream } from "./EegStreamContext";
+import { useNav } from "./NavProvider";
 
 function rms(values) {
   if (!values.length) return 0;
@@ -45,38 +46,36 @@ export default function LiveFeed() {
   const snrDb = calculateSnrDb(graphData);
   const snrLabel = snrDb === null ? "No signal" : snrDb >= 20 ? "Optimal" : snrDb >= 10 ? "Good" : "Noisy";
   const snrProgress = snrDb === null ? 0 : clamp((snrDb / 30) * 100, 0, 100);
+  const { toggleNav } = useNav();
+
+
 
   return (
-    <div className="bg-background text-on-surface min-h-screen w-full overflow-x-hidden flex flex-col md:h-screen md:flex-row">
+    <div className="bg-background text-on-surface h-screen w-full overflow-hidden flex flex-row">
+      
       <SideNavBar />
-
-      {/* TopAppBar (Mobile) */}
-      <header className="md:hidden flex justify-between items-center w-full px-6 h-16 border-b border-[#ecedf6]/5 bg-[#0b0e14] shrink-0 z-20">
-        <span className="text-xl font-bold tracking-widest text-[#00E5FF] uppercase font-['Space_Grotesk']">
-          NEURAL_CORE v1.0
-        </span>
-        <div className="flex gap-4">
-          <span className="material-symbols-outlined cursor-pointer active:scale-95 hover:bg-[#1c2028] transition-colors p-2 rounded-full text-[#ecedf6] opacity-70">
-            sensors
-          </span>
-          <span className="material-symbols-outlined cursor-pointer active:scale-95 hover:bg-[#1c2028] transition-colors p-2 rounded-full text-[#ecedf6] opacity-70">
-            settings_input_component
-          </span>
-          <span className="material-symbols-outlined cursor-pointer active:scale-95 hover:bg-[#1c2028] transition-colors p-2 rounded-full text-[#00E5FF]">
-            account_circle
-          </span>
-        </div>
-      </header>
-
       {/* Main Content Canvas */}
-      <main className="flex-1 min-w-0 overflow-y-auto bg-background p-4 md:p-8 flex flex-col gap-8 relative">
+      <main className="flex-1 min-w-0 overflow-y-auto terminal-scroll bg-background p-8 flex flex-col gap-8 relative">
         {/* Header Section */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 shrink-0">
+        <button
+          type="button"
+          onClick={toggleNav}
+          aria-label="Toggle navigation"
+          className="p-5 self-start inline-flex h-10 w-10 items-center justify-center rounded-sm border border-outline-variant/30 bg-surface-container text-on-surface transition-colors hover:bg-surface-container-high active:scale-95 hover:cursor-pointer"
+        >
+          <span className="sr-only">Toggle navigation</span>
+          <span className="flex flex-col gap-1.5">
+            <span className="h-0.5 w-5 rounded-full bg-primary" />
+            <span className="h-0.5 w-5 rounded-full bg-primary" />
+            <span className="h-0.5 w-5 rounded-full bg-primary" />
+          </span>
+        </button>
+        <header className="flex flex-row justify-between items-end gap-4 shrink-0">
           <div>
-            <h1 className="font-headline text-3xl md:text-5xl font-bold text-on-surface tracking-tight mb-2">
+            <h1 className="font-headline text-5xl font-bold text-on-surface tracking-tight mb-2">
               Live Neural Feed
             </h1>
-            <p className="font-body text-on-surface-variant text-sm md:text-base">
+            <p className="font-body text-on-surface-variant text-base">
               Monitoring high-fidelity BCI telemetry streams.
             </p>
           </div>
@@ -106,8 +105,6 @@ export default function LiveFeed() {
 
             {/* SNR Metric */}
             <div className="bg-surface-container rounded-sm p-6 relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4 opacity-10">
-              </div>
               <span className="font-label text-xs tracking-widest text-on-surface-variant uppercase mb-2 block">
                 Signal-to-Noise Ratio
               </span>
