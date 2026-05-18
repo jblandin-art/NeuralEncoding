@@ -6,20 +6,22 @@ Both the backend, the dev server, and the electron window will need terminals ru
 ## Backend
 
 ### Setup
-- Step 1 - Create the Venv: 
+- Step 1 - Navigate to "backend" folder
+cd backend
+- Step 2 - Create the Venv: 
 python -m venv venv
 or
 py -m venv venv
-- Step 2 - Activate It: 
+- Step 3 - Activate the Venv: 
 .\venv\Scripts\Activate.ps1
-- Step 3 - Install dependencies
+- Step 4 - Install dependencies
 npm install
-- Step 4 - Upgrade pip: 
+- Step 5 - Upgrade pip: 
 python -m pip install --upgrade pip
-- Step 5 - Install FastAPI and Uvicorn
+- Step 6 - Install FastAPI and Uvicorn
 pip install fastapi uvicorn
 
-### Run It
+### Run Uvicorn
 uvicorn fake_stream:app --reload --port 8000
 
 ## Frontend

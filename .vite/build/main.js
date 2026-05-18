@@ -496,6 +496,13 @@ const createWindow = () => {
       mainWindow.minimize();
     }
   });
+
+  /**const isDev = process.env.NODE_ENV === 'development';
+  if (!isDev) {
+    mainWindow.loadFile(path$1.join(__dirname, "index.html"));
+    return;
+  }
+    */
   mainWindow.loadURL("http://localhost:5173");
   //mainWindow.maximize();
   //mainWindow.webContents.openDevTools();
